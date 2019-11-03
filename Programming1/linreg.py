@@ -1,3 +1,8 @@
+'''
+@Author - Gaurav Singhal
+@Description - Implementation of Linear regression using Gradient descent as optimization algorithm
+'''
+
 import argparse
 
 # Load dataset
@@ -43,14 +48,15 @@ def execute(filePath, learningRate, threshold):
     X, y, weights = loadDataset(filePath)
     if X is None:
         return
-    error_sq_old, iteration = 100000000, 0
-    outputFile = open("output.csv", "w+")
+    error_sq_old, iteration = 100000000000000, 0
+    outputFilePath = filePath + "-" + str(learningRate) + "-" + str(threshold) + ".csv";
+    outputFile = open(outputFilePath, "w+")
     while(True):
         y_predict = forwardPropogation(X, weights)
         line = str(iteration) + "," + ",".join(["%.4f"%x for x in weights]) + ","
         # Updating weights and get squared error
         weights, error_sq = backPropogation(X, y, y_predict, weights, learningRate)
-        if(error_sq_old - error_sq < threshold):
+        if(error_sq_old - error_sq <= threshold or error_sq == float('+inf') or error_sq == float('-inf')):
             break
         line += "%.4f"%error_sq + "\n"
         outputFile.write(line)
